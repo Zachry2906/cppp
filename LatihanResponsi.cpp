@@ -108,7 +108,6 @@ if (pilih == 1)
         } } while (ipkk == false); 
         cout << endl;
         }
-        m = m+maha;
         }
         else if (maha < 3)
         { 
@@ -124,9 +123,9 @@ if (pilih == 1)
         cout << "Maaf data mahasiwa belum diisi" << endl;
         } else {
         cout << "==== TAMPILAN DATA ====" << endl;
-        for (int i = 1; i <= maha; i++)
+        for (int i = m; i < maha+m; i++)
         {   
-        cout << "Mahasiswa ke-" << i << endl;
+        cout << "Mahasiswa ke-" << i+1 << endl;
         cout << "Nama Mahasiswa\t : " << nmaha[i] << endl;
         cout << "NIM Mahasiswa\t : " << nim[i] << endl;
         cout << "Kelas Mahasiswa\t : " <<  kelas[i] << endl;
@@ -134,13 +133,18 @@ if (pilih == 1)
         cout << " (" << ipkf(ipk[i]) << ")";
         if (ipk[i] > max1)
         {
+            max2 = max1;
             max1 = ipk[i];
             nmax1 = nmaha[i];
         } else if (ipk[i] < max1)
         {
+            if (ipk[i] > max2)
+            {
             max2 = ipk[i];
             nmax2 = nmaha[i];
+            }
         }
+        
         jumpk = jumpk + ipk[i];
         cout << endl << endl;
         }
