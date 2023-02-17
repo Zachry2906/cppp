@@ -1,0 +1,232 @@
+create table user(
+id_user int NOT NULL AUTO_INCREMENT,
+name varchar (100) NOT NULL,
+username varchar (100) NOT NULL,
+password varchar (100) NOT NULL,
+no_tlpn int NOT NULL,
+email varchar (100),
+role varchar (100),
+PRIMARY KEY (id_user)
+);
+
+create table owner(
+id int NOT NULL AUTO_INCREMENT,
+id_user int NOT NULL,
+name_alias varchar (100) NOT NULL,
+PRIMARY KEY (id),
+FOREIGN KEY (id_user) REFERENCES user(id_user)
+);
+
+create table toko (
+id int NOT NULL AUTO_INCREMENT,
+name varchar (100) NOT NULL,
+alamat varchar (100) NOT NULL,
+describe_toko varchar (100),
+owner_id int NOT NULL,
+PRIMARY KEY (id),
+FOREIGN KEY (owner_id) REFERENCES owner(id)
+);
+
+create table kasir (
+id int NOT NULL AUTO_INCREMENT,
+name varchar (100) NOT NULL,
+username varchar (100) NOT NULL,
+password varchar (100) NOT NULL,
+no_tlpn int NOT NULL,
+email varchar (100) NOT NULL,
+toko_id int,
+PRIMARY KEY (id),
+FOREIGN KEY (toko_id) REFERENCES toko(id)
+);
+
+create table distribusi_barang (
+id int NOT NULL AUTO_INCREMENT,
+jumlah_barang int NOT NULL DEFAULT 0,
+harga_satuan int NOT NULL DEFAULT 0,
+toko_id int NOT NULL,
+barang_id int NOT NULL,
+PRIMARY KEY (id),
+FOREIGN KEY (toko_id) REFERENCES toko(id),
+FOREIGN KEY (barang_id) REFERENCES barang(id)
+);
+
+create table barang (
+id int NOT NULL AUTO_INCREMENT,
+nama_barang varchar (100),
+deskripsi_barang varchar (100)
+);
+
+create table shift_kerja (
+id int NOT NULL AUTO_INCREMENT,
+jenis_shift varchar (100),
+jam_masuk time,
+jam_pulang time,
+kasir_id int,
+PRIMARY KEY (id),
+FOREIGN KEY (kasir_id) REFERENCES kasir(id)
+);
+
+create table laku (
+jumlah_laku int NOT NULL DEFAULT 0,
+total_harga int NOT NULL DEFAULT 0,
+penjualan_id int,
+distribusiBarang_id int,
+FOREIGN KEY (penjualan_id) REFERENCES penjualan (id),
+FOREIGN KEY (distribusiBarang_id) REFERENCES distribusi_barang(id)
+);
+
+create table penjualan (
+id int NOT NULL,
+datetime datetime NOT NULL,
+total_harga_penjualan int NOT NULL DEFAULT 0,
+uang_customer int NOT NULL DEFAULT 0,
+uang_kembalian int NOT NULL DEFAULT 0,
+kasir_id int,
+toko_id int,
+PRIMARY KEY (id),
+FOREIGN KEY (kasir_id) REFERENCES kasir (id),
+FOREIGN KEY (toko_id) REFERENCES toko(id)
+);
+
+create table penjadwalan (
+id int NOT NULL,
+nama_hari varchar(100),
+shift_id int,
+kasir_id int,
+PRIMARY KEY (id),
+FOREIGN KEY (shift_id) REFERENCES shift_kerja(id),
+FOREIGN KEY (kasir_id) REFERENCES kasir(id)
+);
+
+create table agenda (
+Id int NOT NULL, 
+nama_agenda varchar(100) NOT NULL, 
+waktu_agenda varchar(100),
+id_takmir_masjid int,
+PRIMARY KEY (Id),
+CONSTRAINT FK_PenyusunAgenda FOREIGN KEY (id_takmir_masjid)
+REFERENCES takmir (id)
+);
+
+INSERT INTO agenda VALUES 
+('1', 'Pengajian Jumat Kliwon', 'Setiap Malam Jumat Kliwon', '1'),
+('2', 'Buka Puasa Bersama', 'Setiap hari selama Bulan Ramadhan', '2'),
+('3', 'Peringatan Nuzulul Quran', '19 April 2022', '2'),
+('4', 'Salat idul fitri', '2 Mei 2022', '2'),
+('5', 'Syawalan warga paraksari', '9 Mei 2022', '3'),
+('6', 'Salat idul adha', '10 Juli 2022', '4'),
+('7', 'Penyembelihan dan pembagian kurban', '10 Juli 2022', '4'),
+('8', 'Peringatan Maulid Nabi', '21 Oktober 2022', '5'),
+('9', 'TPA', 'Setiap Senin, Rabu, dan Jumat', '6'),
+('10', 'Pertemuan Rutin Takmir', 'Setiap malam minggu awal bulan', '7')
+;
+
+INSERT INTO takmir VALUES 
+('1', 'Bima Purba', 'Paraksari', 'Ketua'),
+('2', 'Zalfa', 'Paraksari', 'Wakil Ketua'),
+('3', 'Iwal Saputra', 'Paraksari', 'Sekretaris 1'),
+('4', 'Claudia Okta', 'Paraksari', 'Sekretaris 2'),
+('5', 'Ninis Oktanurahma', 'Paraksari', 'Bendahara 1'),
+('6', 'Salwa Hanifah', 'Paraksari', 'Bendahara 2'),
+('7', 'Ahmad Zakaria', 'Paraksari', 'Ketua Divisi Humas'),
+('8', 'Febrian Ardi', 'Paraksari', 'Ketua Divisi Perkab'),
+('9', 'Maulida Kusuma', 'Paraksari', 'Ketua Divisi Keagamaan'),
+('10', 'Dias Kartika', 'Paraksari', 'Ketua Divisi Wirausaha')
+;
+
+INSERT INTO fasilitas VALUES 
+('1', 'Al-Quran', 'Alat ibadah', '20'),
+('2', 'Sajadah', 'Alat ibadah', '20'),
+('3', 'Mukena', 'Alat ibadah', '20'),
+('4', 'Tikar', 'Perlengkapan Masjid', '15'),
+('5', 'Mic', 'Perlengkapan Masjid', '5'),
+('6', 'Alat Hadrah', 'Perlengkapan Masjid', '10'),
+('7', 'Meja', 'Perlengkapan Masjid', '10'),
+('8', 'Gelas', 'Perlengkapan Masjid', '100'),
+('9', 'Mimbar', 'Perlengkapan Masjid', '1'),
+('10', 'Almari', 'Perlengkapan Masjid', '2'),
+('11', 'Tempat Wudhu', 'Ruangan', '3'),
+('12', 'Lapangan', 'Ruangan', '1'),
+('13', 'Tempat Bermain', 'Ruangan', '1'),
+('14', 'WC', 'Ruangan', '4'),
+('15', 'Masjid', 'Ruangan', '1');
+
+INSERT INTO imam VALUES 
+('1', 'Najib', 'Paraksari', 'H. S.Pdi', '7'),
+('2', 'Rusmadi', 'Paraksari', 'H. S.Psi', '7'),
+('3', 'Kusmadi', 'Paraksari', 'H.', ' 8'),
+('4', 'Hadirin', 'Paraksari', 'H. S.Pdi', '8'),
+('5', 'Afiq', 'Paraksari', 'S. M', '8'),
+('6', 'Irwan', 'Nglanjaran', 'H. P.Psi', '9'),
+('7', 'Ahmadi', 'Paraksari', ' ', '9'),
+('8', 'Akhmad Mustaqim', 'Pojok', 'H. S.Ag', '9'),
+('9', 'Nur Hidayat', 'Paraksari', 'S.Pd', '10'),
+('10', 'Jaenudin', 'Pakem', 'H. S.Ag, M.Si', '10');
+
+INSERT INTO jamaah(id, nama_jamaah, rt_jamaah) VALUES 
+('1', 'Yuriah', 'RT 10'),
+('2', 'Supar', 'RT 10'),
+('3', 'Suhodo', 'RT 10'),
+('4', 'Bambang', 'RT 10'),
+('5', 'Ningsih', 'RT 10'),
+('6', 'Nur', 'RT 10'),
+('7', 'Rini', 'RT 10'),
+('8', 'Esti', 'RT 11'),
+('9', 'Woko', 'RT 11'),
+('10', 'Juandi', 'RT 11'),
+('11', 'Beti', 'RT 11'),
+('12', 'Al', 'RT 11'),
+('13', 'Dwi', 'RT 12'),
+('14', 'Reva', 'RT 12'),
+('15', 'Manto', 'RT 12'),
+('16', 'Irwan', 'RT 12'),
+('17', 'Prapto', 'RT 13'),
+('18', 'Rahmat', 'RT 13'),
+('19', 'Tin', 'RT 13'),
+('20', 'Kiwi', 'RT 13');
+
+INSERT INTO peminjaman(id, id_agenda, id_fasilitas) VALUES 
+('1', '1', '1'),
+('2', '1', '6'),
+('3', '1', '8'),
+('4', '2', '6'),
+('5', '2', '8'),
+('6', '3', '8'),
+('7', '4', '2'),
+('8', '4', '3'),
+('9', '4', '4'),
+('10', '7', '5'),
+('11', '7', '12'),
+('12', '7', '8'),
+('13', '10', '5'),
+('14', '10', '8');
+
+INSERT INTO pj_jamaah VALUES
+('1', '1', 'RT 10'),
+('1', '2', 'RT 10'),
+('1', '3', 'RT 10'),
+('1', '4', 'RT 10'),
+('1', '5', 'RT 10'),
+('1', '6', 'RT 10'),
+('1', '7', 'RT 10'),
+('4', '8', 'RT 11'),
+('4', '9', 'RT 11'),
+('4', '10', 'RT 11'),
+('4', '11', 'RT 11'),
+('4', '12', 'RT 11'),
+('6', '13', 'RT 12'),
+('6', '14', 'RT 12'),
+('6', '15', 'RT 12'),
+('6', '16', 'RT 12'),
+('8', '17', 'RT 13'),
+('8', '18', 'RT 13'),
+('8', '19', 'RT 13'),
+('8', '20', 'RT 13');
+
+create table fasilitas (
+id int NOT NULL,
+nama_fasilitas varchar(100) NOT NULL,
+jenis_vasilitas varchar(100),
+jumlah_fasilitas int NOT NULL DEFAULT 0,
+PRIMARY KEY (id)
+);
